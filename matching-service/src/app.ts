@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser'
 import { MatchSocket } from './routes/match/match.socket'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
+import { userServiceClientImpl } from './clients/user-service/user-service.client'
 
 export const app: Application = express()
 
@@ -24,4 +25,4 @@ RegisterRoutes(app)
 
 app.use(errorHandler)
 
-export const socketIo = new MatchSocket(new Server(createServer()))
+export const socketIo = new MatchSocket(new Server(), userServiceClientImpl)

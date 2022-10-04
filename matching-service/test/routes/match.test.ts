@@ -11,6 +11,23 @@ import {
 } from '../../src/routes/match/match.model'
 import { Difficulty } from '../../src/shared/rooms.model'
 import { SocketEvent } from '../../src/shared/socketio.model'
+import { UserServiceClient } from '../../src/clients/user-service/user-service.client'
+import {
+  UserRole,
+  ValidateTokenResponse,
+} from '../../src/clients/user-service/user-service.model'
+
+class UserServiceClientMock extends UserServiceClient {
+  async validateAccessTokenAndRole(
+    username: string,
+    role: UserRole
+  ): Promise<ValidateTokenResponse> {
+    return {
+      success: 'successful',
+      username,
+    }
+  }
+}
 
 describe('match socket tests', () => {
   let io: Server
@@ -31,7 +48,7 @@ describe('match socket tests', () => {
       port = httpServer.address().port
       address = `http://localhost:${port}`
 
-      matchSocket = new MatchSocket(io)
+      matchSocket = new MatchSocket(io, new UserServiceClientMock())
     })
   })
 
@@ -47,10 +64,20 @@ describe('match socket tests', () => {
    * client 1, 2 -> match found, done
    */
   it('should match two client sockets', (done) => {
+    const client1Username = 'helloworld'
     // @ts-ignore
-    client1 = new Client(address)
+    client1 = new Client(address, {
+      extraHeaders: {
+        Authorization: client1Username,
+      },
+    })
+    const client2Username = 'anotherworld'
     // @ts-ignore
-    client2 = new Client(address)
+    client2 = new Client(address, {
+      extraHeaders: {
+        Authorization: client2Username,
+      },
+    })
 
     const easyDifficultyPayload: FindMatchPayload = {
       difficulty: Difficulty.Easy,
@@ -60,11 +87,11 @@ describe('match socket tests', () => {
     client2.emit(MatchSocketEvent.FindMatch, easyDifficultyPayload)
 
     client1.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client2.id)
+      assert(result.otherUser === client2Username)
     })
 
     client2.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client1.id)
+      assert(result.otherUser === client1Username)
       done()
     })
   })
@@ -77,10 +104,20 @@ describe('match socket tests', () => {
    * Server -> receive cancel, done
    */
   it('should allow user to cancel looking for room', (done) => {
+    const client1Username = 'helloworld'
     // @ts-ignore
-    client1 = new Client(address)
+    client1 = new Client(address, {
+      extraHeaders: {
+        Authorization: client1Username,
+      },
+    })
+    const client2Username = 'anotherworld'
     // @ts-ignore
-    client2 = new Client(address)
+    client2 = new Client(address, {
+      extraHeaders: {
+        Authorization: client2Username,
+      },
+    })
 
     const easyDifficultyPayload: FindMatchPayload = {
       difficulty: Difficulty.Easy,
@@ -93,6 +130,7 @@ describe('match socket tests', () => {
     io.on(SocketEvent.Connection, (socket) => {
       socket.on(MatchSocketEvent.CancelFindMatch, () => {
         assert(socket.id === client1.id)
+        assert(socket.data.username === client1Username)
         done()
       })
     })
