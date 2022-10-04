@@ -1,4 +1,4 @@
-import { Difficulty } from '../../mongo/rooms/rooms.model'
+import { Difficulty } from '../../shared/rooms.model'
 
 export class MatchError extends Error {
   constructor(message: string) {

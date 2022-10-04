@@ -9,10 +9,8 @@ import {
   LeftRoomPayload,
   MatchSocketEvent,
 } from '../../src/routes/match/match.model'
-import { Difficulty } from '../../src/mongo/rooms/rooms.model'
-import sinon from 'sinon'
-import { rooms } from '../../src/mongo/rooms'
-import { SocketEvent } from '../../src/middleware/socketio/socketio.model'
+import { Difficulty } from '../../src/shared/rooms.model'
+import { SocketEvent } from '../../src/shared/socketio.model'
 
 describe('match socket tests', () => {
   let io: Server
@@ -25,8 +23,6 @@ describe('match socket tests', () => {
   before(() => {
     const httpServer = createServer()
     if (!httpServer) throw new Error('Error, httpServer not initalized')
-
-    sinon.stub(rooms, 'create')
 
     io = new Server(httpServer)
 
@@ -71,45 +67,6 @@ describe('match socket tests', () => {
       assert(result.otherUser === client1.id)
       done()
     })
-  })
-
-  /**
-   * Flow:
-   * client 1, client 2 -> find match
-   * client 1, client 2 -> found match
-   * client 1 -> leave room
-   * client 2 -> recv left room, done()
-   */
-  it('should allow client to leave room and other user should get left room event', (done) => {
-    // @ts-ignore
-    client1 = new Client(address)
-    // @ts-ignore
-    client2 = new Client(address)
-
-    const easyDifficultyPayload: FindMatchPayload = {
-      difficulty: Difficulty.Easy,
-    }
-
-    client1.emit(MatchSocketEvent.FindMatch, easyDifficultyPayload)
-    client2.emit(MatchSocketEvent.FindMatch, easyDifficultyPayload)
-
-    client1.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client2.id)
-
-      client1.emit(MatchSocketEvent.LeaveRoom, { roomId: result.roomId })
-    })
-
-    client2.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client1.id)
-    })
-
-    client2.on(
-      MatchSocketEvent.LeftRoom,
-      (leftRoomPayload: LeftRoomPayload) => {
-        assert(leftRoomPayload.socketId === client1.id)
-        done()
-      }
-    )
   })
 
   /**
