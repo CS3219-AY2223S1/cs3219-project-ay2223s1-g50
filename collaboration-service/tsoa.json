@@ -10,24 +10,7 @@
         "name": "access"
       }
     },
-    "tags": [
-      {
-        "name": "Authentication",
-        "description": "Endpoints relating to user authentication"
-      },
-      {
-        "name": "Portfolio",
-        "description": "Endpoints to get user's portfolio"
-      },
-      {
-        "name": "User",
-        "description": "Endpoints to get user profile and roles"
-      },
-      {
-        "name": "Info",
-        "description": "Misc endpoints to get server information"
-      }
-    ],
+    "tags": [],
     "outputDirectory": "build",
     "specVersion": 3
   },

@@ -1,32 +1,5 @@
 # App Architecture
 
-## Overview:
-
-```sh
-~/ ❯ tree -L 1
-├── Dockerfile # contains docker settings
-├── build # contains build files after running build
-├── docker-compose.yml # contains docker-compose stuff
-├── nodemon.json # nodemon settings
-├── package.json # package.json settings
-├── src # all src files
-├── test # just for show... jk
-├── tsconfig.json # ts compiler settings
-├── tsoa.json # tsoa settings
-└── yarn.lock # allows next person to have same deps
-```
-
-```sh
-~/src ❯ tree -L 1
-.
-├── app.ts # contains all middleware and application dependencies
-├── index.ts # starts database and server
-├── middleware # contains middleware
-├── mongo # contains all mongo models
-├── routes # contains all routes
-└── utils # contains all util methods
-```
-
 ## Adding a new route
 
 - Each route directory inside `~/src/routes` contains at least three files

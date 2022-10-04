@@ -59,6 +59,8 @@ describe('match socket tests', () => {
 
   /**
    * Flow:
+   * client 1 join room
+   * client 2 join room
    * client 1 -> send chat message to 2
    * client 2 -> receive message, send message to 1
    * client 1 -> receive message, done
