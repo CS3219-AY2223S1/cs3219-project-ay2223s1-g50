@@ -1,4 +1,3 @@
-import { assert } from 'console'
 import { Server, Socket } from 'socket.io'
 import { v4 } from 'uuid'
 import { SocketEvent } from '../../middleware/socketio/socketio.model'
@@ -10,9 +9,7 @@ import {
   LeaveRoomPayload,
   LeftRoomPayload,
   MatchSocketEvent,
-  ReceiveRoomMessagePayload,
   RoomId,
-  SendRoomMessagePayload,
   SocketId,
 } from './match.model'
 
@@ -93,24 +90,6 @@ export class MatchSocket {
     })
   }
 
-  newRoomMessage(
-    { message, roomId, type }: SendRoomMessagePayload,
-    sendingSocket: Socket
-  ) {
-    this.rooms[roomId].forEach((otherSocketId) => {
-      if (otherSocketId === sendingSocket.id) return
-
-      const receivePayload: ReceiveRoomMessagePayload = {
-        type,
-        from: sendingSocket.id,
-        message,
-      }
-      sendingSocket
-        .to(otherSocketId)
-        .emit(MatchSocketEvent.RoomMessage, receivePayload)
-    })
-  }
-
   start() {
     this.io.on(SocketEvent.Connection, (socket) => {
       socket.on(MatchSocketEvent.FindMatch, async (payload: FindMatchPayload) =>
@@ -119,13 +98,6 @@ export class MatchSocket {
 
       socket.on(MatchSocketEvent.CancelFindMatch, () =>
         this.cancelFindMatch(socket)
-      )
-
-      socket.on(
-        MatchSocketEvent.RoomMessage,
-        (roomMessagePayload: SendRoomMessagePayload) => {
-          this.newRoomMessage(roomMessagePayload, socket)
-        }
       )
 
       socket.on(MatchSocketEvent.LeaveRoom, (payload: LeaveRoomPayload) => {

@@ -27,18 +27,6 @@ export type LeftRoomPayload = {
   socketId: SocketId
 }
 
-export type SendRoomMessagePayload = {
-  roomId: RoomId
-  type: RoomMessageType
-  message: string
-}
-
-export type ReceiveRoomMessagePayload = {
-  from: SocketId
-  type: RoomMessageType
-  message: string
-}
-
 export type MatchSuccess = {
   success: true
   roomId: RoomId
@@ -60,12 +48,4 @@ export enum MatchSocketEvent {
   // leaving room events
   LeaveRoom = 'leave_room',
   LeftRoom = 'left_room',
-
-  // receiving message events
-  RoomMessage = 'room_message',
-}
-
-export enum RoomMessageType {
-  Chat = 'chat',
-  Code = 'code',
 }

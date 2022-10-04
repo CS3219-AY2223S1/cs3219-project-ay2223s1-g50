@@ -1,4 +1,4 @@
-# Intrvwr Beast Service
+# Matching Service
 
 ## Setup for development
 
@@ -23,7 +23,7 @@ yarn dev
 
 ```bash
 # build docker image
-docker build . -t <your_docker_username>/intrvwr-beast-service
+docker build . -t <your_docker_username>/<service-name>
 
 # run docker compose in background
 # to run in foreground, remove -d flag
