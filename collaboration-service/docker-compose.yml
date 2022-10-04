@@ -1,0 +1,11 @@
+# reference: https://medium.com/zenofai/how-to-build-a-node-js-and-mongodb-application-with-docker-containers-15e535baabf5
+
+version: '3'
+services:
+  intrvwr-beast-service:
+    container_name: intrvwr-beast-service
+    image: nhzaci/intrvwr-beast-service
+    restart: always
+    build: .
+    ports:
+      - '80:5000'
