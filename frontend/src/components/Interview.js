@@ -13,13 +13,20 @@ import { useLocation, useParams } from 'react-router-dom'
 
 const Interview = () => {
   const userContext = useContext(UserContext)
-  const [questionsShown, setQuestionsShown] = useState({})
   const token = userContext.token
+
+  const [questionsShown, setQuestionsShown] = useState({})
+  const [editorText, setEditorText] = useState('')
+
   const { difficulty, roomId } = useParams()
   const {
     state: { questions },
   } = useLocation()
 
+  const CollaborationEvent = {
+    RoomMessage: 'collaboration:room_message',
+    JoinRoom: 'collaboration:join_room',
+  }
   const client = new Client(URI_COLLABORATION_SVC, {
     extraHeaders: {
       Authorization: `Bearer ${token}`,
@@ -27,14 +34,17 @@ const Interview = () => {
   })
 
   useEffect(() => {
-    client.emit('collaboration:join_room', {
+    client.emit(CollaborationEvent.JoinRoom, {
       roomId,
     })
-    setQuestionsShown(questions)
   })
 
-  client.on('collaboration:room_message', ({ from, message }) => {
-    console.log(message)
+  useEffect(() => {
+    setQuestionsShown(questions)
+  }, [questions])
+
+  client.on(CollaborationEvent.RoomMessage, ({ from, message }) => {
+    setEditorText(message)
   })
 
   const questionsBox = (questions) => (
@@ -88,6 +98,18 @@ const Interview = () => {
     }
   }
 
+  // Removed this until we add syncing up of questions through collab service
+  // technology is not there yet :') LOL
+  const goNextButton = (
+    <Button
+      sx={{ fontSize: '1rem' }}
+      variant="outlined"
+      onClick={() => getNewQuestion()}
+    >
+      GO NEXT
+    </Button>
+  )
+
   return (
     <Box sx={{ margin: '4rem' }}>
       <Box
@@ -96,32 +118,25 @@ const Interview = () => {
         <Typography variant={'h4'} sx={{ padding: '0 1rem 0 0' }}>
           Coding Question
         </Typography>
-        <Button
-          sx={{ fontSize: '1rem' }}
-          variant="outlined"
-          onClick={() => getNewQuestion()}
-          disabled
-        >
-          GO NEXT
-        </Button>
+        {/* goNextButton was here */}
         <AccessTimeIcon sx={{ fontSize: '3rem', margin: '0 0.5rem 0 1rem' }} />
         <Timer />
       </Box>
+      {/* TODO: Try to figure out why this doesn't change when questionsShown changes */}
       {questionsBox(questionsShown)}
       <Typography variant={'h4'} sx={{ padding: '2rem 0 0 0' }}>
         Code Editor
       </Typography>
       <TextareaAutosize
-        // TODO
-        // UPDATE ROOM NUMBER
         onChange={(e) => {
-          client.emit('collaboration:room_message', {
-            roomId: '1',
+          client.emit(CollaborationEvent.RoomMessage, {
+            roomId,
             message: e.target.value,
           })
         }}
         aria-label="empty textarea"
         placeholder="Type your code here"
+        value={editorText}
         style={{ minWidth: '100%', minHeight: 500, marginTop: '1rem' }}
       />
     </Box>

@@ -15,7 +15,6 @@ import {
 import { UserServiceClient } from '../../clients/user-service/user-service.client'
 import { Logger } from '../../utils/logger'
 import { QuestionServiceClient } from '../../clients/question-service/question-service.client'
-import { assert } from 'console'
 
 export class MatchSocket {
   private io: Server
@@ -109,8 +108,6 @@ export class MatchSocket {
           token,
           difficulty
         )
-
-      console.log('Questions received', { questions })
 
       const currSocketPayload: FindMatchResult = {
         roomId: newRoomId,
