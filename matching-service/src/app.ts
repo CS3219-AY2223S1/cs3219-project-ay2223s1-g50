@@ -25,4 +25,15 @@ RegisterRoutes(app)
 
 app.use(errorHandler)
 
-export const socketIo = new MatchSocket(new Server(), userServiceClientImpl)
+export const io = new Server({
+  cors: {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  },
+})
+
+const socketPort = Number(process.env.SOCKET_PORT) ?? 3000
+io.listen(socketPort)
+console.log(`Socket live at port ${socketPort}`)
+
+new MatchSocket(io, userServiceClientImpl)

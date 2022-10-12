@@ -13,6 +13,7 @@ import {
   ValidateTokenResponse,
 } from '../../clients/user-service/user-service.model'
 import { UserServiceClient } from '../../clients/user-service/user-service.client'
+import { Logger } from '../../utils/logger'
 
 export class MatchSocket {
   private io: Server
@@ -71,10 +72,13 @@ export class MatchSocket {
 
   async findMatch({ difficulty }: FindMatchPayload, socket: Socket) {
     const queue = this.queues[difficulty]
+    Logger.info(
+      `Reveived new find match for difficulty: ${difficulty}, from socket: ${socket.id}`
+    )
 
     // if queue empty, return false for match for now
     if (queue.length === 0) {
-      queue.push(socket.data.username)
+      queue.push(socket.id)
       return
     }
 
@@ -82,8 +86,12 @@ export class MatchSocket {
     // return undefined, but in this case we are sure it's not empty
     // @ts-ignore
     const otherSocketUsername: string = queue.shift()
-
     const newRoomId = v4()
+
+    Logger.info(
+      `Match found between socket: ${socket.id} and ${otherSocketUsername}, sending to room: ${newRoomId}`
+    )
+
     const currSocketPayload: FindMatchResult = {
       roomId: newRoomId,
       otherUser: otherSocketUsername,
