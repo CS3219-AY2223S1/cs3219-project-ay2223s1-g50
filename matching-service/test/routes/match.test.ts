@@ -16,6 +16,8 @@ import {
   UserRole,
   ValidateTokenResponse,
 } from '../../src/clients/user-service/user-service.model'
+import { QuestionServiceClient } from '../../src/clients/question-service/question-service.client'
+import { QuestionPairResponse } from '../../src/clients/question-service/question-service.model'
 
 class UserServiceClientMock extends UserServiceClient {
   async validateAccessTokenAndRole(
@@ -29,9 +31,21 @@ class UserServiceClientMock extends UserServiceClient {
   }
 }
 
+class QuestionServiceClientMock extends QuestionServiceClient {
+  async getQuestionPairByDifficulty(
+    token: string,
+    difficulty: Difficulty
+  ): Promise<QuestionPairResponse> {
+    return {
+      success: 'yes',
+      questionOne: ['hello world'],
+      questionTwo: ['another world'],
+    }
+  }
+}
+
 describe('match socket tests', () => {
   let io: Server
-  let matchSocket: MatchSocket
   let port
   let address: string
   let client1: ClientSocket
@@ -48,7 +62,11 @@ describe('match socket tests', () => {
       port = httpServer.address().port
       address = `http://localhost:${port}`
 
-      matchSocket = new MatchSocket(io, new UserServiceClientMock())
+      new MatchSocket(
+        io,
+        new UserServiceClientMock(),
+        new QuestionServiceClientMock()
+      )
     })
   })
 
@@ -79,6 +97,8 @@ describe('match socket tests', () => {
       },
     })
 
+    let roomId: string
+
     const easyDifficultyPayload: FindMatchPayload = {
       difficulty: Difficulty.Easy,
     }
@@ -87,11 +107,20 @@ describe('match socket tests', () => {
     client2.emit(MatchSocketEvent.FindMatch, easyDifficultyPayload)
 
     client1.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client2Username)
+      if (roomId === undefined) {
+        roomId = result.roomId
+      }
+      assert(result.difficulty === Difficulty.Easy)
+      assert(result.roomId == roomId)
+      assert(result.questions.questionOne.includes('hello world'))
+      assert(result.questions.questionTwo.includes('another world'))
     })
 
     client2.on(MatchSocketEvent.MatchFound, (result: FindMatchResult) => {
-      assert(result.otherUser === client1Username)
+      assert(result.difficulty === Difficulty.Easy)
+      assert(result.roomId == roomId)
+      assert(result.questions.questionOne.includes('hello world'))
+      assert(result.questions.questionTwo.includes('another world'))
       done()
     })
   })

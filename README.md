@@ -2,7 +2,7 @@
 
 This is a template repository for CS3219 project.
 
-## User Service
+## User and Question Service
 1. Rename `.env.sample` file to `.env`.
 2. Create a Cloud DB URL using Mongo Atlas.
 3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.

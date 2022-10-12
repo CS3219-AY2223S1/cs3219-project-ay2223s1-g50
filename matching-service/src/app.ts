@@ -9,6 +9,7 @@ import { MatchSocket } from './routes/match/match.socket'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
 import { userServiceClientImpl } from './clients/user-service/user-service.client'
+import { questionServiceClientImpl } from './clients/question-service/question-service.client'
 
 export const app: Application = express()
 
@@ -36,4 +37,4 @@ const socketPort = Number(process.env.SOCKET_PORT) ?? 3000
 io.listen(socketPort)
 console.log(`Socket live at port ${socketPort}`)
 
-new MatchSocket(io, userServiceClientImpl)
+new MatchSocket(io, userServiceClientImpl, questionServiceClientImpl)

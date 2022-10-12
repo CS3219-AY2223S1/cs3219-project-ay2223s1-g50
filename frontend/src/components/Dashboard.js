@@ -21,8 +21,7 @@ function Dashboard() {
   const [isDashboardDialogOpen, setIsDashboardDialogOpen] = useState(false)
   const [dialogTitle, setDialogTitle] = useState('')
   const [dialogMsg, setDialogMsg] = useState('')
-  const [questionDifficulty, setQuestionDifficulty] = useState('')
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const token = userContext.token
   const MatchEvents = {
@@ -53,18 +52,21 @@ function Dashboard() {
     </Box>
   ))
 
-  const selectQuestionDifficulty = (difficulty) => {
+  client.on(
+    MatchEvents.MatchFound,
+    async ({ roomId, difficulty, questions }) => {
+      navigate(`/interview/${difficulty.toLowerCase()}/${roomId}`, {
+        state: { questions },
+      })
+    }
+  )
+
+  const selectQuestionDifficulty = async (difficulty) => {
     setIsLoading(true)
-    setQuestionDifficulty(difficulty)
     client.emit(MatchEvents.FindMatch, {
       difficulty,
     })
   }
-
-  client.on(MatchEvents.MatchFound, ({ roomId }) => {
-    console.log(`Received match found: ${questionDifficulty}, room: ${roomId}`)
-    navigate(`/interview/${questionDifficulty}/${roomId}`)
-  })
 
   const closeDialog = () => setIsDashboardDialogOpen(false)
 

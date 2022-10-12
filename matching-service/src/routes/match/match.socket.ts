@@ -14,14 +14,21 @@ import {
 } from '../../clients/user-service/user-service.model'
 import { UserServiceClient } from '../../clients/user-service/user-service.client'
 import { Logger } from '../../utils/logger'
+import { QuestionServiceClient } from '../../clients/question-service/question-service.client'
+import { assert } from 'console'
 
 export class MatchSocket {
   private io: Server
   private userServiceClient: UserServiceClient
+  private questionServiceClient: QuestionServiceClient
 
   private queues: { [key in Difficulty]: SocketId[] }
 
-  constructor(io: Server, userServiceClient: UserServiceClient) {
+  constructor(
+    io: Server,
+    userServiceClient: UserServiceClient,
+    questionServiceClient: QuestionServiceClient
+  ) {
     this.io = io
     this.queues = {
       Easy: [],
@@ -29,6 +36,7 @@ export class MatchSocket {
       Hard: [],
     }
     this.userServiceClient = userServiceClient
+    this.questionServiceClient = questionServiceClient
     this.start()
   }
 
@@ -92,19 +100,36 @@ export class MatchSocket {
       `Match found between socket: ${socket.id} and ${otherSocketUsername}, sending to room: ${newRoomId}`
     )
 
-    const currSocketPayload: FindMatchResult = {
-      roomId: newRoomId,
-      otherUser: otherSocketUsername,
-    }
-    socket.emit(MatchSocketEvent.MatchFound, currSocketPayload)
+    try {
+      const token = socket.request.headers.authorization
+      if (token === undefined) throw Error('Unable to get token from socket')
 
-    const otherSocketPayload: FindMatchResult = {
-      roomId: newRoomId,
-      otherUser: socket.data.username,
+      const { data: questions } =
+        await this.questionServiceClient.getQuestionPairByDifficulty(
+          token,
+          difficulty
+        )
+
+      console.log('Questions received', { questions })
+
+      const currSocketPayload: FindMatchResult = {
+        roomId: newRoomId,
+        difficulty,
+        questions,
+      }
+      socket.emit(MatchSocketEvent.MatchFound, currSocketPayload)
+
+      const otherSocketPayload: FindMatchResult = {
+        roomId: newRoomId,
+        difficulty,
+        questions,
+      }
+      socket
+        .to(otherSocketUsername)
+        .emit(MatchSocketEvent.MatchFound, otherSocketPayload)
+    } catch (e) {
+      Logger.error(`Error occurred when trying to match sockets: ${e}`)
     }
-    socket
-      .to(otherSocketUsername)
-      .emit(MatchSocketEvent.MatchFound, otherSocketPayload)
   }
 
   cancelFindMatch(socket: Socket) {

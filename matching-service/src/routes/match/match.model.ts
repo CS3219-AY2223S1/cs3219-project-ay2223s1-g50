@@ -1,3 +1,4 @@
+import { QuestionPairResponse } from '../../clients/question-service/question-service.model'
 import { Difficulty } from '../../shared/rooms.model'
 
 export class MatchError extends Error {
@@ -16,7 +17,8 @@ export type FindMatchPayload = {
 export type FindMatchResult = {
   message?: string
   roomId: RoomId
-  otherUser: SocketId
+  difficulty: Difficulty
+  questions: QuestionPairResponse
 }
 
 export type LeaveRoomPayload = {
