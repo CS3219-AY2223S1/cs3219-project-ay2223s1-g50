@@ -1,0 +1,10 @@
+# ignore artifacts
+/node_modules/
+/build/
+.DS_STORE
+.env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
