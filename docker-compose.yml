@@ -32,6 +32,14 @@ services:
       - "5001:5001"
     # network_mode: host
 
+  collaboration-service:
+    build: 
+      context: ./chat-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5005:5005"
+    # network_mode: host
+
 # uSe network_mode host to allow communication BETWEEN service containers via localhost
 # However, this currently doesn't work on MacOS, will work on Linux 
 # https://github.com/docker/for-mac/issues/2716

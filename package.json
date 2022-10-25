@@ -4,8 +4,8 @@
   "description": "This is a template repository for CS3219 project.",
   "main": "index.js",
   "scripts": {
-    "installAll": "npm i && concurrently \"npm --prefix ./user-service i\" \"npm --prefix ./question-service i\" \"npm --prefix ./frontend i\" \"yarn --cwd ./matching-service\" \"yarn --cwd ./collaboration-service\"",
-    "dev": "concurrently \"npm --prefix ./user-service run dev\" \"npm --prefix ./frontend run start\" \"npm --prefix ./question-service run dev\" \"yarn --cwd ./matching-service dev\" \"yarn --cwd ./collaboration-service dev\"",
+    "installAll": "npm i && concurrently \"npm --prefix ./user-service i\" \"npm --prefix ./question-service i\" \"npm --prefix ./frontend i\" \"yarn --cwd ./matching-service\" \"yarn --cwd ./collaboration-service\" \"yarn --cwd ./chat-service\"",
+    "dev": "concurrently \"npm --prefix ./user-service run dev\" \"npm --prefix ./frontend run start\" \"npm --prefix ./question-service run dev\" \"yarn --cwd ./matching-service dev\" \"yarn --cwd ./collaboration-service dev\" \"yarn --cwd ./chat-service dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

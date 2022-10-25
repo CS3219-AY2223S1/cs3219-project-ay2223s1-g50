@@ -30,7 +30,7 @@ docker-compose up --build
 4. Install npm packages using `npm i`.
 5. Run User Service using `npm run dev`.
 
-## Collaboration and Matching Service
+## Collaboration, Chat and Matching Service
 1. Copy `.env.sample` and rename it to `.env`
 2. Install packages with yarn, `yarn`
 3. Start services with `yarn dev`
