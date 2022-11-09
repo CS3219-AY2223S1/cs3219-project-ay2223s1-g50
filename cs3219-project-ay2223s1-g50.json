@@ -1,0 +1,189 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:582969597664:task-definition/cs3219-project-ay2223s1-g50:47",
+  "containerDefinitions": [
+      {
+          "name": "question-service",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-question:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 200,
+          "portMappings": [
+              {
+                  "containerPort": 8090,
+                  "hostPort": 8090,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      },
+      {
+          "name": "user-service",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-user:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 1000,
+          "portMappings": [
+              {
+                  "containerPort": 8080,
+                  "hostPort": 8080,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      },
+      {
+          "name": "collaboration-service",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-collaboration:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 1500,
+          "portMappings": [
+              {
+                  "containerPort": 5001,
+                  "hostPort": 5001,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      },
+      {
+          "name": "matching-service",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-matching:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 400,
+          "portMappings": [
+              {
+                  "containerPort": 5003,
+                  "hostPort": 5003,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      },
+      {
+          "name": "chat-service",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-chat:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 500,
+          "portMappings": [
+              {
+                  "containerPort": 5005,
+                  "hostPort": 5005,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      },
+      {
+          "name": "frontend",
+          "image": "582969597664.dkr.ecr.ap-southeast-1.amazonaws.com/cs3219-project-ay2223s1-g50-frontend:c49209ab0d2433654147dfacad3197fb13d9fa6d",
+          "cpu": 0,
+          "memoryReservation": 200,
+          "portMappings": [
+              {
+                  "containerPort": 3000,
+                  "hostPort": 3000,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true,
+          "environment": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/cs3219-project-ay2223s1-g50",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
+      }
+  ],
+  "family": "cs3219-project-ay2223s1-g50",
+  "networkMode": "host",
+  "revision": 47,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+      {
+          "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+      "EXTERNAL",
+      "EC2"
+  ],
+  "requiresCompatibilities": [
+      "EC2"
+  ],
+  "cpu": "2047",
+  "memory": "3894",
+  "registeredAt": "2022-10-29T04:20:13.333000+08:00",
+  "registeredBy": "arn:aws:iam::582969597664:root"
+}

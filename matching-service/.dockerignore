@@ -1,0 +1,22 @@
+/node_modules/
+/build/
+/.elasticbeanstalk
+/test/
+.env.example
+*.md
+*.yml# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore

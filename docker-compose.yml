@@ -1,0 +1,51 @@
+# This docker-compose file is used for development purposes
+# so that we can spin up the services locally in Docker quickly
+
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+      # network_mode: host
+  user-service:
+    build:
+      context: ./user-service 
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    # network_mode: host
+  question-service:
+    build:
+      context: ./question-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8090:8090"
+    # network_mode: host
+  matching-service:
+    build: 
+      context: ./matching-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5003:5003"
+    # network_mode: host
+  collaboration-service:
+    build: 
+      context: ./collaboration-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5001:5001"
+    # network_mode: host
+  chat-service:
+    build: 
+      context: ./chat-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5005:5005"
+    # network_mode: host
+
+# use network_mode host to allow communication BETWEEN service containers via localhost
+# However, this currently doesn't work on MacOS, will work on Linux 
+# https://github.com/docker/for-mac/issues/2716

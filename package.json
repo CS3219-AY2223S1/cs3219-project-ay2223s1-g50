@@ -1,0 +1,25 @@
+{
+  "name": "cs3219-project-ay2223s1-g50",
+  "version": "1.0.0",
+  "description": "This is a template repository for CS3219 project.",
+  "main": "index.js",
+  "scripts": {
+    "installAll": "npm i && concurrently \"npm --prefix ./user-service i\" \"npm --prefix ./question-service i\" \"npm --prefix ./frontend i\" \"yarn --cwd ./matching-service\" \"yarn --cwd ./collaboration-service\" \"yarn --cwd ./chat-service\"",
+    "dev": "concurrently \"npm --prefix ./user-service run dev\" \"npm --prefix ./question-service run dev\" \"yarn --cwd ./matching-service dev\" \"yarn --cwd ./collaboration-service dev\" \"yarn --cwd ./chat-service dev\" \"npm --prefix ./frontend run dev\" ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g50.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g50/issues"
+  },
+  "homepage": "https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g50#readme",
+  "dependencies": {
+    "concurrently": "^7.4.0"
+  }
+}

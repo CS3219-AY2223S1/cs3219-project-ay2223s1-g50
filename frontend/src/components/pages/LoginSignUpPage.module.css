@@ -1,0 +1,17 @@
+.box-text {
+  cursor: pointer;
+}
+
+.box-text:hover {
+  color: blue;
+}
+
+.login {
+  padding-top: 1rem;
+  width: 300px;
+}
+
+.signup {
+  padding-top: 2rem;
+  width: 300px;
+}

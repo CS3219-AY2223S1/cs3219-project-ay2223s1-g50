@@ -1,0 +1,26 @@
+# This dockerfile is used for local Docker testing (used by Docker Compose)
+
+# Base image
+FROM node:16
+
+# Dev Dockerfile doesn't take in arguments, it has access to local .env file 
+
+# Working directory 
+WORKDIR /usr/src/app
+
+# Copy package json for dependencies
+COPY package*.json ./
+
+# Install prod dependencies
+RUN npm ci
+# RUN npm ci --omit=dev
+
+# set environment 
+ENV NODE_ENV docker-dev 
+
+# Copy everything to container
+COPY . .
+
+EXPOSE 8080
+
+CMD [ "npm", "run", "start" ]

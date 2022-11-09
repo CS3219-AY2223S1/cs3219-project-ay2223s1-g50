@@ -1,0 +1,23 @@
+# This dockerfile is used for local Docker testing (used by Docker Compose)
+
+# Base image
+FROM node:16
+
+# Working directory 
+WORKDIR /app
+
+# Copy package json for dependencies
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# set environment 
+ENV REACT_APP_ENV prod 
+
+# Copy everything to container
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
